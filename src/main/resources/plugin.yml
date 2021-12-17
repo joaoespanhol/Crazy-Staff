@@ -1,0 +1,8 @@
+name: StaffX
+authors: [Ryder Belserion]
+main: net.savagelabs.StaffX
+api-version: '1.13'
+version: '1.0-STABLE'
+description: 'A simple staff plugin'
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.6.0

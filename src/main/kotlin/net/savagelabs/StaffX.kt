@@ -1,29 +1,34 @@
 package net.savagelabs
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import net.savagelabs.func.persist.DefaultFile
-import net.savagelabs.func.persist.Project
-import net.savagelabs.func.persist.write
-import org.bukkit.plugin.java.JavaPlugin
-import java.io.File
+import dev.triumphteam.core.BukkitPlugin
+import dev.triumphteam.core.feature.install
+import net.savagelabs.func.persist.Config
+import net.savagelabs.func.persist.Settings
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 
-class StaffX : JavaPlugin() {
+class StaffX : BukkitPlugin(), Listener {
 
     override fun onEnable() {
-        println("The plugin is launching.")
-        if (this.dataFolder.exists()) this.dataFolder.mkdirs()
+        if (!dataFolder.exists()) dataFolder.mkdirs()
 
-        val data = Project("test")
+        install(Config)
 
-        val string = Json.encodeToString(data)
-
-        write(this, DefaultFile(false, File("config.json"), string))
-        //Config.load(this)
+        this.server.pluginManager.registerEvents(this, this)
     }
 
     override fun onDisable() {
-        //Config.load(this)
-        //Config.save(this)
+
+    }
+
+    @EventHandler
+    fun onJoin(e: PlayerJoinEvent): Unit = with(e) {
+        val msg = config[Settings.STAFF_ENTER_MESSAGE.toString()]
+        player.sendMessage(config.get(Settings.STAFF_ENTER_MESSAGE.toString()).toString())
+        //if (Config.testString.contains(player.uniqueId)) return
+
+        //val newPlayer = User(player.uniqueId.toString(), player.name)
+        //Config.testString[player.uniqueId] = newPlayer
     }
 }

@@ -4,3 +4,5 @@ gradle
 gradlew.bat
 gradlew
 build
+
+src/main/kotlin/net/savagelabs/func/types/yaml/enums/Messages.kt

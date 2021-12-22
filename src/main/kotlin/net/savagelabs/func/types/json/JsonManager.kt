@@ -1,7 +1,7 @@
 package net.savagelabs.func.types.json
 
 import com.google.gson.GsonBuilder
-import me.corecraft.types.json.adapters.EnumTypeAdapter
+import net.savagelabs.types.json.adapters.EnumTypeAdapter
 import net.savagelabs.func.types.json.adapters.LocalTimeTypeAdapter
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.*

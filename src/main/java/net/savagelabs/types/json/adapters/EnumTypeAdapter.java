@@ -1,4 +1,4 @@
-package me.corecraft.types.json.adapters;
+package net.savagelabs.types.json.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

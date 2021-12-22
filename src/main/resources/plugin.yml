@@ -4,6 +4,12 @@ main: net.savagelabs.StaffX
 api-version: '1.13'
 version: '1.0-STABLE'
 description: 'A simple staff plugin'
+permissions:
+  staffx.use:
+    description: Allows you to enter /staff
+    default: false
+  staffx.vanish.see:
+    description: Allows other staff to see you.
+    default: false
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.6.0
-  - org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1

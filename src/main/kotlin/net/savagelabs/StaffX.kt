@@ -1,34 +1,34 @@
 package net.savagelabs
 
-import dev.triumphteam.core.BukkitPlugin
-import dev.triumphteam.core.feature.install
+import me.mattstudios.mf.base.CommandManager
+import net.savagelabs.commands.StaffCommand
 import net.savagelabs.func.persist.Config
-import net.savagelabs.func.persist.Settings
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
+import net.savagelabs.func.persist.Data
+import net.savagelabs.func.persist.DataListener
+import net.savagelabs.func.registerListener
+import org.bukkit.plugin.java.JavaPlugin
 
-class StaffX : BukkitPlugin(), Listener {
+class StaffX: JavaPlugin() {
 
     override fun onEnable() {
         if (!dataFolder.exists()) dataFolder.mkdirs()
 
-        install(Config)
+        val commandManager = CommandManager(this)
 
-        this.server.pluginManager.registerEvents(this, this)
+        commandManager.hideTabComplete(true)
+        commandManager.register(StaffCommand(this))
+
+        //FileManager().setup(this)
+
+        Config.load(this)
+        Data.load(this)
+
+        registerListener(
+            DataListener(this)
+        )
     }
 
     override fun onDisable() {
-
-    }
-
-    @EventHandler
-    fun onJoin(e: PlayerJoinEvent): Unit = with(e) {
-        val msg = config[Settings.STAFF_ENTER_MESSAGE.toString()]
-        player.sendMessage(config.get(Settings.STAFF_ENTER_MESSAGE.toString()).toString())
-        //if (Config.testString.contains(player.uniqueId)) return
-
-        //val newPlayer = User(player.uniqueId.toString(), player.name)
-        //Config.testString[player.uniqueId] = newPlayer
+        Data.save(this)
     }
 }

@@ -77,7 +77,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     fun onPlayerInteract(e: PlayerInteractAtEntityEvent): Unit = with(e) {
         if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !player.hasPermission("staffx.items.use") || hand != EquipmentSlot.HAND) return
 
-        if (player.hasPermission("staffx.freeze.bypass")) {
+        if (rightClicked.hasPermission("staffx.freeze.bypass")) {
             val title = Title.title(parseMessage("&cCannot freeze."), parseMessage("&fNice Try!"))
             player.showTitle(title)
             return

@@ -11,5 +11,9 @@ permissions:
   staffx.vanish.see:
     description: Allows other staff to see you.
     default: false
-libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.6.0
+  staffx.freeze.bypass:
+    description: Bypass freeze tool
+    default: false
+  staffx.items.use:
+    description: Use the staff tools
+    default: false

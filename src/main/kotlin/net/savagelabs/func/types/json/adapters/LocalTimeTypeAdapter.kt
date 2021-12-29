@@ -1,6 +1,8 @@
 package net.savagelabs.func.types.json.adapters
 
 import com.google.gson.*
+import org.bukkit.Location
+import org.bukkit.plugin.java.JavaPlugin
 import java.lang.reflect.Type
 import java.time.LocalTime
 

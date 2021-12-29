@@ -1,4 +1,4 @@
-@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@file:Suppress("DEPRECATION")
 
 package net.savagelabs.commands
 
@@ -12,7 +12,8 @@ import me.mattstudios.msg.adventure.AdventureMessage
 import me.mattstudios.msg.base.MessageOptions
 import me.mattstudios.msg.base.internal.Format
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.title.Title
+import net.savagelabs.events.module.MiscManager
+import net.savagelabs.func.colorizeList
 import net.savagelabs.func.persist.Config
 import net.savagelabs.func.persist.Data
 import org.bukkit.GameMode
@@ -27,14 +28,7 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
     @Default
     @Permission("staffx.use")
     fun defaultCommand(player: Player): Unit = with(player) {
-        when (getSavedPlayer()?.isStaff) {
-            true -> {
-                player.exitStaff(plugin)
-            }
-            else -> {
-                player.enterStaff(plugin)
-            }
-        }
+        if (getSavedPlayer()?.isStaff()!!) player.exitStaff(plugin) else player.enterStaff(plugin)
     }
 
     @SubCommand("reload")
@@ -46,14 +40,7 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
         Data.save(plugin)
 
         commandSender.server.onlinePlayers.forEach {
-            when (it.getSavedPlayer()?.isStaff) {
-                true -> {
-                    it.createInventory(plugin)
-                }
-                else -> {
-                    plugin.logger.info("No players are currently in /staff")
-                }
-            }
+            if (it.getSavedPlayer()?.isStaff()!!) it.createInventory(plugin)
         }
     }
 }
@@ -62,94 +49,47 @@ fun Player.getSavedPlayer() = Data.players[uniqueId]
 
 fun Player.hideStaff(plugin: JavaPlugin) {
     server.onlinePlayers.forEach {
-        if (it.player?.hasPermission("staffx.vanish.see")!!) {
-            it.showPlayer(plugin, player!!)
-            return
-        } else {
-            it.hidePlayer(plugin, player!!)
-        }
+        if (it.player?.hasPermission("staffx.vanish.see")!!) it.showPlayer(plugin, player!!) else it.hidePlayer(plugin, player!!)
     }
 }
 
 fun Player.showStaff(plugin: JavaPlugin) {
     server.onlinePlayers.forEach {
         it.showPlayer(plugin, player!!)
-        return
     }
 }
 
 fun Player.enterStaff(plugin: JavaPlugin) {
 
-    // Tell them they entered staff mode
-    val title = Title.title(parseMessage(Config.staffModeEnter.title), parseMessage(Config.staffModeEnter.subtitle))
+    MiscManager.sendTitle(this, Config.staffModeEnter.title, Config.staffModeEnter.subtitle)
 
-    showTitle(title)
+    getSavedPlayer()?.setStaff()
+    getSavedPlayer()?.setVanished(this, plugin)
 
-    // Save armor contents
-    val armorContents = inventory.armorContents
-    val invContents = inventory.contents
-    getSavedPlayer()?.armorContents = armorContents
-    getSavedPlayer()?.inventoryContents = invContents
-    // Set isStaff for true, So we can persist joins/restarts
-    getSavedPlayer()?.isStaff = true
-    getSavedPlayer()?.isVanished = true
-    // Just in case it's not true
-    //if (!getSavedPlayer()?.isVanished!!) getSavedPlayer()?.isVanished = true
+    getSavedPlayer()?.setLastLocation(world.name, location.x, location.y, location.z, location.yaw, location.pitch)
 
-    // Set gamemode to ADVENTURE with fly
     gameMode = GameMode.ADVENTURE
     allowFlight = true
     isFlying = true
 
-    // Hide the player
-    hideStaff(plugin)
-
-    // Create items
     createInventory(plugin)
-
-    Data.save(plugin)
 }
 
 fun Player.exitStaff(plugin: JavaPlugin) {
 
-    // tell them they exited staff mode.
-    val title = Title.title(parseMessage(Config.staffModeExit.title), parseMessage(Config.staffModeExit.subtitle))
+    MiscManager.sendTitle(this, Config.staffModeExit.title, Config.staffModeExit.subtitle)
 
-    showTitle(title)
+    getSavedPlayer()?.setStaff()
+    getSavedPlayer()?.setVanished(this, plugin)
 
-    // Set booleans to false
-    getSavedPlayer()?.isStaff = false
-    // Set vanished to true to keep vanish on creation
-    getSavedPlayer()?.isVanished = true
-
-    // Show the player.
-    showStaff(plugin)
-
-    // Clear inventory
     inventory.clear()
 
-    // Set gamemodes and isFlying to false
     gameMode = GameMode.SURVIVAL
     allowFlight = false
     isFlying = false
 
-    // Get armor contents and re-set them
-    val armorContents = getSavedPlayer()?.armorContents
-    val contents = getSavedPlayer()?.inventoryContents
-
-    inventory.setArmorContents(armorContents)
-    inventory.contents = contents
-
-    getSavedPlayer()?.armorContents = emptyArray()
-    getSavedPlayer()?.inventoryContents = emptyArray()
-
-    // Teleport to spawn
-    val world = server.getWorld("world")!!
-    val location = Location(world, world.spawnLocation.x, world.spawnLocation.y, world.spawnLocation.z, world.spawnLocation.yaw, world.spawnLocation.pitch)
-
-    teleportAsync(location)
-
-    Data.save(plugin)
+    val loc = getSavedPlayer()?.getLocation(world.name)
+    teleport(Location(loc?.world, loc?.x!!, loc.y, loc.z, loc.yaw, loc.pitch))
 }
 
 fun Player.createInventory(plugin: JavaPlugin) {
@@ -158,16 +98,13 @@ fun Player.createInventory(plugin: JavaPlugin) {
 
     val randomTeleport = ItemBuilder.from(Config.staffItems.randomItem.material).name(parseName(Config.staffItems.randomItem.name)).build()
     val freezeItem = ItemBuilder.from(Config.staffItems.freezeItem.material).name(parseName(Config.staffItems.freezeItem.name)).build()
-    val vanishOffItem = ItemBuilder.from(Config.staffItems.vanishOffItem.material).name(parseName(Config.staffItems.vanishOffItem.name)).build()
-    val vanishOnItem = ItemBuilder.from(Config.staffItems.vanishOnItem.material).name(parseName(Config.staffItems.vanishOnItem.name)).build()
 
-    when {
-        Data.players[uniqueId]?.isVanished!! -> {
-            inventory.setItem(Config.staffItems.vanishOnItem.slot, vanishOnItem)
-            hideStaff(plugin)
-        }
-        else -> {
-            inventory.setItem(Config.staffItems.vanishOffItem.slot, vanishOffItem)
+    getSavedPlayer()?.switchItem(this, plugin)
+
+    if (Config.staffCustomItem.isNotEmpty()) {
+        Config.staffCustomItem.forEach {
+            val item = ItemBuilder.from(it.material).name(parseName(it.name)).setLore(parseLore(it.lore)).amount(1).build()
+            inventory.setItem(it.slot, item)
         }
     }
 
@@ -182,6 +119,10 @@ fun getMessage(): AdventureMessage {
 
 fun parseName(msg: String): Component {
     return getMessage().parse(msg)
+}
+
+fun parseLore(msg: List<String>): ArrayList<String> {
+    return colorizeList(msg)
 }
 
 fun parseMessage(message: String): Component {

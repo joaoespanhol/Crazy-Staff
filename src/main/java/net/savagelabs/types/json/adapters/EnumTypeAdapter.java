@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +23,15 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
             for (T constant : classOfT.getEnumConstants()) {
                 String name = constant.name();
                 SerializedName annotation = classOfT.getField(name).getAnnotation(SerializedName.class);
-                if (annotation != null) name = annotation.value();
+                if (annotation != null) {
+                    name = annotation.value();
+                }
                 nameToConstant.put(name, constant);
                 constantToName.put(constant, name);
             }
-        } catch (NoSuchFieldException ignored) {}
+        } catch (NoSuchFieldException e) {
+            // ignore since it could be a modified enum
+        }
     }
 
     public static <TT> TypeAdapterFactory newEnumTypeHierarchyFactory() {
@@ -36,8 +39,12 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
             @SuppressWarnings({"rawtypes", "unchecked"})
             public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
                 Class<? super T> rawType = typeToken.getRawType();
-                if (!Enum.class.isAssignableFrom(rawType) || rawType == Enum.class) return null;
-                if (!rawType.isEnum()) rawType = rawType.getSuperclass();
+                if (!Enum.class.isAssignableFrom(rawType) || rawType == Enum.class) {
+                    return null;
+                }
+                if (!rawType.isEnum()) {
+                    rawType = rawType.getSuperclass(); // handle anonymous subclasses
+                }
                 return (TypeAdapter<T>) new EnumTypeAdapter(rawType);
             }
         };

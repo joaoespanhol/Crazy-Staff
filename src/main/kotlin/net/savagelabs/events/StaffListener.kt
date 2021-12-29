@@ -1,0 +1,187 @@
+package net.savagelabs.events
+
+import net.kyori.adventure.title.Title
+import net.savagelabs.commands.*
+import net.savagelabs.events.module.MiscManager
+import net.savagelabs.events.module.RandomManager
+import net.savagelabs.func.persist.Config
+import net.savagelabs.func.persist.Data
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.*
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.plugin.java.JavaPlugin
+
+class StaffListener(private val plugin: JavaPlugin) : Listener {
+
+    @EventHandler
+    fun onPlayerLogout(e: PlayerQuitEvent): Unit = with(e) {
+
+        if (!player.getSavedPlayer()?.isFrozen()!!) return
+
+        if (Config.staffQuitCommands.isEmpty()) return
+
+        Config.staffQuitCommands.forEach {
+            player.server.dispatchCommand(e.player.server.consoleSender, it.replace("%player%", player.name))
+        }
+    }
+
+    @EventHandler
+    fun onPlayerInteract(e: PlayerInteractEvent): Unit = with(e) {
+        if (!player.hasPermission("staffx.items.use")) return
+
+        when (player.inventory.itemInMainHand.type) {
+            Config.staffItems.randomItem.material -> {
+                RandomManager.createGui(player)
+                isCancelled = true
+            }
+            Config.staffItems.vanishOffItem.material -> {
+                player.getSavedPlayer()?.setVanished(player, plugin)
+                isCancelled = true
+            }
+            Config.staffItems.vanishOnItem.material -> {
+                player.getSavedPlayer()?.setVanished(player, plugin)
+                isCancelled = true
+            }
+            else -> {
+                Config.staffCustomItem.forEach {
+                    if (player.inventory.itemInMainHand.type == it.material) player.performCommand(it.command)
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    fun onPlayerInteract(e: PlayerInteractAtEntityEvent): Unit = with(e) {
+        if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !player.hasPermission("staffx.items.use") || hand != EquipmentSlot.HAND) return
+
+        if (player.hasPermission("staffx.freeze.bypass")) {
+            val title = Title.title(parseMessage("&cCannot freeze."), parseMessage("&fNice Try!"))
+            player.showTitle(title)
+            return
+        }
+
+        runFreeze(rightClicked as Player, player)
+    }
+
+    private fun runFreeze(rightClicked: Player, player: Player) {
+        when (rightClicked.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                MiscManager.sendTitle(rightClicked, Config.unFreezeTitle.title, Config.unFreezeTitle.subtitle)
+
+                rightClicked.getSavedPlayer()?.setFrozen()
+
+                rightClicked.gameMode = GameMode.SURVIVAL
+
+                player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
+                //rightClicked.spawnParticle(Particle.CRIMSON_SPORE, player.location, 6)
+            }
+            false -> {
+                MiscManager.sendTitle(rightClicked, Config.freezeTitle.title, Config.freezeTitle.subtitle)
+
+                rightClicked.getSavedPlayer()?.setFrozen()
+
+                rightClicked.gameMode = GameMode.ADVENTURE
+                rightClicked.teleport(
+                    Location(
+                        rightClicked.server.getWorld("world"),
+                        0.5,
+                        61.0,
+                        0.5,
+                        0.022159427404403687F,
+                        -0.1511383205652237F
+                    )
+                )
+                player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
+                //rightClicked.spawnParticle(Particle.WARPED_SPORE, player.location, 6)
+            }
+            else -> {}
+        }
+    }
+
+    @EventHandler
+    fun onPlayerMove(e: PlayerMoveEvent): Unit = with(e) {
+        when (player.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                isCancelled = true
+            }
+            false -> {
+                return
+            }
+            else -> {}
+        }
+    }
+
+    @EventHandler
+    fun onPlayerDrop(e: PlayerDropItemEvent): Unit = with(e) {
+        when (player.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                isCancelled = true
+            }
+            false -> {
+                return
+            }
+            else -> {}
+        }
+
+        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerPick(e: PlayerAttemptPickupItemEvent): Unit = with(e) {
+        when (player.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                isCancelled = true
+            }
+            false -> {
+                return
+            }
+            else -> {}
+        }
+        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerDamage(e: PlayerInteractEvent): Unit = with(e) {
+        when (player.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                isCancelled = true
+            }
+            false -> {
+                return
+            }
+            else -> {}
+        }
+        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerDamageTo(e: EntityDamageEvent): Unit = with(e) {
+        if (e.entity !is Player) return
+        val player = e.entity as Player
+        when (player.getSavedPlayer()?.isFrozen()) {
+            true -> {
+                isCancelled = true
+            }
+            false -> {
+                return
+            }
+            else -> {}
+        }
+        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerDropClick(e: InventoryClickEvent): Unit = with(e) {
+        if (whoClicked !is Player) return
+        val player = whoClicked as Player
+        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+    }
+}

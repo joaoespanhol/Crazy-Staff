@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version "1.6.0"
 
     id("com.github.johnrengelman.shadow") version "7.0.0"
-
     java
 }
 
@@ -24,19 +23,14 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
 
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 
     implementation("me.mattstudios.utils:matt-framework:1.4.6")
     implementation("dev.triumphteam:triumph-gui:3.0.5")
     implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
-    //implementation("com.github.stefvanschie.inventoryframework:IF:0.10.3")
 }
 
 tasks {
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-    }
-
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             jvmTarget = "17"

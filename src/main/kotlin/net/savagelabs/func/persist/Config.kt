@@ -1,6 +1,6 @@
 package net.savagelabs.func.persist
 
-import net.savagelabs.func.types.json.JsonManager
+import net.savagelabs.func.types.json.Serializer
 import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -9,10 +9,33 @@ object Config {
     data class StaffModeEnterTitle(val title: String, val subtitle: String)
     data class StaffModeQuitTitle(val title: String, val subtitle: String)
 
-    var messagePrefix = "&r &cStaff &8>"
+    data class FreezeTitle(val title: String, val subtitle: String)
+    data class UnFreezeTitle(val title: String, val subtitle: String)
 
     var staffModeEnter = StaffModeEnterTitle("&cStaff Mode", "&aENABLED")
     var staffModeExit = StaffModeQuitTitle("&cStaff Mode", "&cDISABLED")
+
+    var freezeTitle = FreezeTitle("&cYou have been frozen.", "&fDo not log out.")
+    var unFreezeTitle = UnFreezeTitle("&cYou have been unfrozen.", "")
+
+    var staffSilentOpen = false
+    var staffVanishEffects = true
+
+    var staffQuitCommands = listOf(
+        "tempban %player% hacking 1d"
+    )
+
+    var staffCustomItem = listOf(
+        CustomItem(
+            Material.CHEST,
+            "&cPunishment Menu",
+            listOf(),
+            "punisher",
+            0
+        )
+    )
+
+    data class CustomItem(val material: Material, val name: String, val lore: List<String>, val command: String, val slot: Int)
 
     var staffItems = StaffItems(
         RandomItem(
@@ -41,9 +64,9 @@ object Config {
         )
     )
 
-    fun load(plugin: JavaPlugin) = JsonManager(plugin, false).loadFromFile(this, Config::class.java, "config.json")
+    fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, false).load(this, Config::class.java, "config.json")
 
-    fun save(plugin: JavaPlugin) = JsonManager(plugin, false).saveToFile(this, "config.json")
+    fun save(plugin: JavaPlugin) = Serializer(plugin.dataFolder, false).save(this, "config.json")
 
 }
 

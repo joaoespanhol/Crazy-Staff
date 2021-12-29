@@ -5,8 +5,8 @@ plugins {
     java
 }
 
-group = "net.savagelabs"
-version = "1.0-STABLE"
+group = "me.corecraft"
+version = "1.1-STABLE"
 
 repositories {
     mavenCentral()

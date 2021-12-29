@@ -1,8 +1,8 @@
 name: StaffX
 authors: [Ryder Belserion]
-main: net.savagelabs.StaffX
+main: me.corecraft.StaffX
 api-version: '1.13'
-version: '1.0-STABLE'
+version: '1.1-STABLE'
 description: 'A simple staff plugin'
 permissions:
   staffx.use:

@@ -59,12 +59,12 @@ data class Player(val uuid: UUID) {
     }
 
     fun setVanished(player: Player?, plugin: JavaPlugin) {
-        if (Config.staffVanishEffects) MiscManager.effectLightning(player?.location!!)
         vanished = !vanished
         switchItem(player, plugin)
     }
 
     fun switchItem(player: Player?, plugin: JavaPlugin) {
+        if (Config.staffVanishEffects) MiscManager.effectLightning(player?.location!!)
         val vanishOffItem = ItemBuilder.from(Config.staffItems.vanishOffItem.material).name(parseName(Config.staffItems.vanishOffItem.name)).build()
         val vanishOnItem = ItemBuilder.from(Config.staffItems.vanishOnItem.material).name(parseName(Config.staffItems.vanishOnItem.name)).build()
         when (vanished) {

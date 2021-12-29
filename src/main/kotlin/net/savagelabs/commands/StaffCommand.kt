@@ -73,8 +73,6 @@ fun Player.enterStaff(plugin: JavaPlugin) {
     gameMode = GameMode.CREATIVE
 
     createInventory(plugin)
-
-    Data.save(plugin)
 }
 
 fun Player.exitStaff(plugin: JavaPlugin) {
@@ -93,8 +91,6 @@ fun Player.exitStaff(plugin: JavaPlugin) {
     teleport(Location(loc?.world, loc?.x!!, loc.y, loc.z, loc.yaw, loc.pitch))
 
     getSavedPlayer()?.removeLocation()
-
-    Data.save(plugin)
 }
 
 fun Player.createInventory(plugin: JavaPlugin) {

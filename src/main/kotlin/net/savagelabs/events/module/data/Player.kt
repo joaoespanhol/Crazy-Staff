@@ -1,7 +1,6 @@
 package net.savagelabs.events.module.data
 
 import dev.triumphteam.gui.builder.item.ItemBuilder
-import net.savagelabs.commands.getSavedPlayer
 import net.savagelabs.commands.hideStaff
 import net.savagelabs.commands.parseName
 import net.savagelabs.commands.showStaff
@@ -23,10 +22,10 @@ data class Player(val uuid: UUID) {
 
     private var location = hashMapOf<String, DataLocation>()
 
-    data class DataLocation(val worldName: String, val x: Double, val y: Double, val z: Double, val yaw: Float = -1F, val pitch: Float = -1F) {
-        fun exists() = Bukkit.getWorld(worldName) != null
+    data class DataLocation(val worldName: String?, val x: Double, val y: Double, val z: Double, val yaw: Float = -1F, val pitch: Float = -1F) {
+        //fun exists() = Bukkit.getWorld(worldName) != null
 
-        fun getLocation() = org.bukkit.Location(Bukkit.getWorld(worldName), x, y, z).apply {
+        fun getLocation() = Location(Bukkit.getWorld(worldName.toString()), x, y, z).apply {
             val dataYaw = this@DataLocation.yaw
             if (dataYaw != -1F) yaw = dataYaw
 
@@ -35,16 +34,16 @@ data class Player(val uuid: UUID) {
         }
     }
 
-    fun getLocation(worldName: String): Location? {
-        if (!location[worldName]?.exists()!!) {
-            location.remove(worldName)
-            return null
-        }
-        return location[worldName]?.getLocation()
+    fun removeLocation() {
+        return location.clear()
     }
 
-    fun setLastLocation(worldName: String, x: Double, y: Double, z: Double, yaw: Float = -1F, pitch: Float = -1F) {
-        location[worldName] = DataLocation(worldName, x, y, z, yaw, pitch)
+    fun getCurrentLocation(name: String): Location? {
+        return location[name]?.getLocation()
+    }
+
+    fun setLastLocation(name: String, worldName: String, x: Double, y: Double, z: Double, yaw: Float = -1F, pitch: Float = -1F) {
+        location[name] = DataLocation(worldName, x, y, z, yaw, pitch)
     }
 
     fun isStaff() = staff

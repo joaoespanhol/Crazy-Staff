@@ -34,10 +34,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     fun onWorldChange(e: PlayerChangedWorldEvent): Unit = with(e) {
         if (!player.getSavedPlayer()?.isStaff()!!) return
 
-        player.gameMode = GameMode.ADVENTURE
-        player.allowFlight = true
-        player.isFlying = true
-        player.isInvulnerable = true
+        player.gameMode = GameMode.CREATIVE
     }
 
     @EventHandler
@@ -98,6 +95,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                 rightClicked.getSavedPlayer()?.setFrozen()
 
                 rightClicked.gameMode = GameMode.SURVIVAL
+                rightClicked.isInvulnerable = false
 
                 player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
             }
@@ -107,6 +105,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                 rightClicked.getSavedPlayer()?.setFrozen()
 
                 rightClicked.gameMode = GameMode.ADVENTURE
+                rightClicked.isInvulnerable = true
                 rightClicked.teleport(
                     Location(
                         rightClicked.server.getWorld("world"),
@@ -136,69 +135,35 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onPlayerDrop(e: PlayerDropItemEvent): Unit = with(e) {
-        when (player.getSavedPlayer()?.isFrozen()) {
-            true -> {
-                isCancelled = true
-            }
-            false -> {
-                return
-            }
-            else -> {}
-        }
-
-        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }
 
     @EventHandler
     fun onPlayerPick(e: PlayerAttemptPickupItemEvent): Unit = with(e) {
-        when (player.getSavedPlayer()?.isFrozen()) {
-            true -> {
-                isCancelled = true
-            }
-            false -> {
-                return
-            }
-            else -> {}
-        }
-        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }
 
     @EventHandler
     fun onPlayerDamage(e: PlayerInteractEvent): Unit = with(e) {
-        when (player.getSavedPlayer()?.isFrozen()) {
-            true -> {
-                isCancelled = true
-            }
-            false -> {
-                return
-            }
-            else -> {}
-        }
-        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }
 
     @EventHandler
     fun onPlayerDamageTo(e: EntityDamageEvent): Unit = with(e) {
         if (e.entity !is Player) return
         val player = e.entity as Player
-        when (player.getSavedPlayer()?.isFrozen()) {
-            true -> {
-                isCancelled = true
-            }
-            false -> {
-                return
-            }
-            else -> {}
-        }
-        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }
 
     @EventHandler
     fun onPlayerDropClick(e: InventoryClickEvent): Unit = with(e) {
         if (whoClicked !is Player) return
         val player = whoClicked as Player
-        if (player.getSavedPlayer()?.isStaff()!!) isCancelled = true
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) {
+            isCancelled = true
+            return
+        }
     }
 }

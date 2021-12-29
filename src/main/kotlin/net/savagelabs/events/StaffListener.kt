@@ -14,12 +14,31 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.plugin.java.JavaPlugin
 
 class StaffListener(private val plugin: JavaPlugin) : Listener {
+
+    @EventHandler
+    fun onHungerChange(e: FoodLevelChangeEvent): Unit = with(e) {
+        if (entity !is Player) return
+        val player = entity as Player
+
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!! && foodLevel < 20) foodLevel = 20
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun onWorldChange(e: PlayerChangedWorldEvent): Unit = with(e) {
+        if (!player.getSavedPlayer()?.isStaff()!!) return
+
+        player.gameMode = GameMode.ADVENTURE
+        player.allowFlight = true
+        player.isFlying = true
+        player.isInvulnerable = true
+    }
 
     @EventHandler
     fun onPlayerLogout(e: PlayerQuitEvent): Unit = with(e) {
@@ -81,7 +100,6 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                 rightClicked.gameMode = GameMode.SURVIVAL
 
                 player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
-                //rightClicked.spawnParticle(Particle.CRIMSON_SPORE, player.location, 6)
             }
             false -> {
                 MiscManager.sendTitle(rightClicked, Config.freezeTitle.title, Config.freezeTitle.subtitle)
@@ -100,7 +118,6 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                     )
                 )
                 player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
-                //rightClicked.spawnParticle(Particle.WARPED_SPORE, player.location, 6)
             }
             else -> {}
         }

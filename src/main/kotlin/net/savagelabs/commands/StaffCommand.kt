@@ -66,13 +66,19 @@ fun Player.enterStaff(plugin: JavaPlugin) {
     getSavedPlayer()?.setStaff()
     getSavedPlayer()?.setVanished(this, plugin)
 
-    getSavedPlayer()?.setLastLocation(world.name, location.x, location.y, location.z, location.yaw, location.pitch)
+    if (getSavedPlayer()?.getCurrentLocation(name) != null) getSavedPlayer()?.removeLocation()
+
+    getSavedPlayer()?.setLastLocation(name, world.name, location.x, location.y, location.z, location.yaw, location.pitch)
 
     gameMode = GameMode.ADVENTURE
     allowFlight = true
     isFlying = true
+    foodLevel = 20
+    isInvulnerable = true
 
     createInventory(plugin)
+
+    Data.save(plugin)
 }
 
 fun Player.exitStaff(plugin: JavaPlugin) {
@@ -87,9 +93,14 @@ fun Player.exitStaff(plugin: JavaPlugin) {
     gameMode = GameMode.SURVIVAL
     allowFlight = false
     isFlying = false
+    isInvulnerable = false
 
-    val loc = getSavedPlayer()?.getLocation(world.name)
+    val loc = getSavedPlayer()?.getCurrentLocation(name)
     teleport(Location(loc?.world, loc?.x!!, loc.y, loc.z, loc.yaw, loc.pitch))
+
+    getSavedPlayer()?.removeLocation()
+
+    Data.save(plugin)
 }
 
 fun Player.createInventory(plugin: JavaPlugin) {

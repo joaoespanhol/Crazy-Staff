@@ -1,17 +1,20 @@
 package me.corecraft
 
-import me.mattstudios.mf.base.CommandManager
 import me.corecraft.commands.StaffCommand
 import me.corecraft.events.StaffListener
+import me.corecraft.func.MetricsHandler
 import me.corecraft.func.persist.Config
 import me.corecraft.func.persist.Data
 import me.corecraft.func.persist.DataListener
 import me.corecraft.func.registerListener
+import me.mattstudios.mf.base.CommandManager
 import org.bukkit.plugin.java.JavaPlugin
 
 class StaffX: JavaPlugin() {
 
     override fun onEnable() {
+        MetricsHandler(this).connect()
+
         if (!dataFolder.exists()) dataFolder.mkdirs()
 
         val commandManager = CommandManager(this)

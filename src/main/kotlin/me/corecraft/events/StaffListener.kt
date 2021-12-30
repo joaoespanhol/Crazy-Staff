@@ -59,10 +59,12 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
             }
             Config.staffItems.vanishOffItem.material -> {
                 player.getSavedPlayer()?.setVanished(player, plugin)
+                if (Config.staffVanishEffects) MiscManager.effectLightning(player.location)
                 isCancelled = true
             }
             Config.staffItems.vanishOnItem.material -> {
                 player.getSavedPlayer()?.setVanished(player, plugin)
+                if (Config.staffVanishEffects) MiscManager.effectLightning(player.location)
                 isCancelled = true
             }
             else -> {

@@ -2,7 +2,7 @@ name: StaffX
 authors: [Ryder Belserion]
 main: me.corecraft.StaffX
 api-version: '1.13'
-version: '1.1-STABLE'
+version: '1.2-STABLE'
 description: 'A simple staff plugin'
 permissions:
   staffx.use:

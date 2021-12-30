@@ -23,7 +23,6 @@ data class Player(val uuid: UUID) {
     private var location = hashMapOf<String, DataLocation>()
 
     data class DataLocation(val worldName: String?, val x: Double, val y: Double, val z: Double, val yaw: Float = -1F, val pitch: Float = -1F) {
-        //fun exists() = Bukkit.getWorld(worldName) != null
 
         fun getLocation() = Location(Bukkit.getWorld(worldName.toString()), x, y, z).apply {
             val dataYaw = this@DataLocation.yaw

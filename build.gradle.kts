@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.corecraft"
-version = "1.1-STABLE"
+version = "1.2-STABLE"
 
 repositories {
     mavenCentral()
@@ -28,6 +28,8 @@ dependencies {
     implementation("me.mattstudios.utils:matt-framework:1.4.6")
     implementation("dev.triumphteam:triumph-gui:3.0.5")
     implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
+
+    implementation("org.bstats:bstats-bukkit:2.2.1")
 }
 
 tasks {
@@ -40,7 +42,8 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
 
-        relocate("me.mattstudios.utils", "net.savagelabs.libs")
-        relocate("dev.triumphteam.gui", "net.savagelabs.libs")
+        relocate("me.mattstudios.utils", "me.corecraft.libs")
+        relocate("dev.triumphteam.gui", "me.corecraft.libs")
+        relocate("org.bstats", "me.corecraft.libs")
     }
 }

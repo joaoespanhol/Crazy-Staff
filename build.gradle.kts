@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.corecraft"
-version = "1.2-STABLE"
+version = "1.3-STABLE"
 
 repositories {
     mavenCentral()

@@ -6,12 +6,15 @@ import net.kyori.adventure.title.Title
 import me.corecraft.events.module.MiscManager
 import me.corecraft.events.module.RandomManager
 import me.corecraft.func.persist.Config
+import me.corecraft.hooks.enums.Permissions
+import me.corecraft.hooks.enums.hasPermission
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -52,7 +55,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     fun onPlayerInteract(e: PlayerInteractEvent): Unit = with(e) {
         if (!player.getSavedPlayer()?.isStaff()!!) return
 
-        if (getPermission(player, Permissions.STAFF_ITEMS_USE)) return
+        if (!hasPermission(player, Permissions.STAFF_ITEMS_USE)) return
 
         when (player.inventory.itemInMainHand.type) {
             Config.staffItems.randomItem.material -> {
@@ -60,12 +63,12 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                 isCancelled = true
             }
             Config.staffItems.vanishOffItem.material -> {
-                player.getSavedPlayer()?.setVanished(player, plugin)
+                player.getSavedPlayer()?.setVanished(plugin)
                 if (Config.staffVanishEffects) MiscManager.effectLightning(player.location)
                 isCancelled = true
             }
             Config.staffItems.vanishOnItem.material -> {
-                player.getSavedPlayer()?.setVanished(player, plugin)
+                player.getSavedPlayer()?.setVanished(plugin)
                 if (Config.staffVanishEffects) MiscManager.effectLightning(player.location)
                 isCancelled = true
             }
@@ -80,11 +83,11 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractAtEntityEvent): Unit = with(e) {
         if (!player.getSavedPlayer()?.isStaff()!!) return
-        if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !getPermission(player, Permissions.STAFF_ITEMS_USE) || hand != EquipmentSlot.HAND) return
+        if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !hasPermission(player, Permissions.STAFF_ITEMS_USE) || hand != EquipmentSlot.HAND) return
 
         val person = rightClicked as Player
 
-        if (getPermission(person, Permissions.FREEZE_BYPASS)) {
+        if (hasPermission(person, Permissions.FREEZE_BYPASS)) {
             val title = Title.title(parseMessage("&cCannot freeze."), parseMessage("&fNice Try!"))
             player.showTitle(title)
             return
@@ -160,6 +163,13 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     fun onPlayerDamageTo(e: EntityDamageEvent): Unit = with(e) {
         if (e.entity !is Player) return
         val player = e.entity as Player
+        if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerDamage(e: EntityDamageByEntityEvent): Unit = with(e) {
+        if (e.entity !is Player) return
+        val player = e.damager as Player
         if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }
 

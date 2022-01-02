@@ -27,4 +27,4 @@ fun registerPermissions(pluginManager: PluginManager) {
     }
 }
 
-fun getPermission(humanEntity: HumanEntity, permissions: Permissions) = humanEntity.hasPermission(permissions.getFullNode())
+fun hasPermission(humanEntity: HumanEntity, permissions: Permissions) = humanEntity.hasPermission(permissions.getFullNode())

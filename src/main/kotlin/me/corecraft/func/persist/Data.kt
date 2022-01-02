@@ -40,6 +40,10 @@ class DataListener(private val plugin: JavaPlugin) : Listener {
                 createPlayer(player)
             }
         }
+
+        player.server.onlinePlayers.forEach {
+            it.hideStaff(plugin)
+        }
     }
 
     private fun createPlayer(player: org.bukkit.entity.Player): Player {

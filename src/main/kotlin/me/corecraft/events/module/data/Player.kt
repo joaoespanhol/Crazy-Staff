@@ -1,14 +1,8 @@
 package me.corecraft.events.module.data
 
-import dev.triumphteam.gui.builder.item.ItemBuilder
-import me.corecraft.commands.hideStaff
-import me.corecraft.commands.parseName
-import me.corecraft.commands.showStaff
-import me.corecraft.events.module.MiscManager
-import me.corecraft.func.persist.Config
+import me.corecraft.events.module.VanishManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
@@ -49,6 +43,8 @@ data class Player(val uuid: UUID) {
 
     fun isFrozen() = frozen
 
+    fun isVanished() = vanished
+
     fun setFrozen() {
         frozen = !isFrozen()
     }
@@ -57,23 +53,8 @@ data class Player(val uuid: UUID) {
         staff = !isStaff()
     }
 
-    fun setVanished(player: Player?, plugin: JavaPlugin) {
+    fun setVanished(plugin: JavaPlugin) {
         vanished = !vanished
-        switchItem(player, plugin)
-    }
-
-    fun switchItem(player: Player?, plugin: JavaPlugin) {
-        val vanishOffItem = ItemBuilder.from(Config.staffItems.vanishOffItem.material).name(parseName(Config.staffItems.vanishOffItem.name)).build()
-        val vanishOnItem = ItemBuilder.from(Config.staffItems.vanishOnItem.material).name(parseName(Config.staffItems.vanishOnItem.name)).build()
-        when (vanished) {
-            true -> {
-                player?.hideStaff(plugin)
-                player?.inventory?.setItem(Config.staffItems.vanishOnItem.slot, vanishOnItem)
-            }
-            false -> {
-                player?.showStaff(plugin)
-                player?.inventory?.setItem(Config.staffItems.vanishOffItem.slot, vanishOffItem)
-            }
-        }
+        VanishManager(plugin).run(Bukkit.getPlayer(uuid)!!)
     }
 }

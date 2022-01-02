@@ -13,9 +13,14 @@ import me.mattstudios.msg.base.MessageOptions
 import me.mattstudios.msg.base.internal.Format
 import net.kyori.adventure.text.Component
 import me.corecraft.events.module.MiscManager
+import me.corecraft.events.module.VanishManager
 import me.corecraft.func.colorizeList
 import me.corecraft.func.persist.Config
 import me.corecraft.func.persist.Data
+import me.corecraft.hooks.Support
+import me.corecraft.hooks.enums.Permissions
+import me.corecraft.hooks.enums.hasPermission
+import me.corecraft.hooks.types.EssentialsXAPI
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
@@ -48,14 +53,28 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
 fun Player.getSavedPlayer() = Data.players[uniqueId]
 
 fun Player.hideStaff(plugin: JavaPlugin) {
-    server.onlinePlayers.forEach {
-        if (it.player?.hasPermission("staffx.vanish.see")!!) it.showPlayer(plugin, player!!) else it.hidePlayer(plugin, player!!)
+    when {
+        Support.ESSENTIALSX.isPluginLoaded -> {
+            EssentialsXAPI.setVanish(player)
+        }
+        else -> {
+            server.onlinePlayers.forEach {
+                if (hasPermission(it, Permissions.VANISH_SEE)) it.showPlayer(plugin, player!!) else it.hidePlayer(plugin, player!!)
+            }
+        }
     }
 }
 
 fun Player.showStaff(plugin: JavaPlugin) {
-    server.onlinePlayers.forEach {
-        it.showPlayer(plugin, player!!)
+    when {
+        Support.ESSENTIALSX.isPluginLoaded -> {
+            EssentialsXAPI.setVanish(player)
+        }
+        else -> {
+            server.onlinePlayers.forEach {
+                it.showPlayer(plugin, player!!)
+            }
+        }
     }
 }
 
@@ -64,7 +83,7 @@ fun Player.enterStaff(plugin: JavaPlugin) {
     MiscManager.sendTitle(this, Config.staffModeEnter.title, Config.staffModeEnter.subtitle)
 
     getSavedPlayer()?.setStaff()
-    getSavedPlayer()?.setVanished(this, plugin)
+    VanishManager(plugin).run(this)
 
     if (getSavedPlayer()?.getCurrentLocation(name) != null) getSavedPlayer()?.removeLocation()
 
@@ -80,7 +99,7 @@ fun Player.exitStaff(plugin: JavaPlugin) {
     MiscManager.sendTitle(this, Config.staffModeExit.title, Config.staffModeExit.subtitle)
 
     getSavedPlayer()?.setStaff()
-    getSavedPlayer()?.setVanished(this, plugin)
+    VanishManager(plugin).run(this)
 
     inventory.clear()
 
@@ -100,7 +119,7 @@ fun Player.createInventory(plugin: JavaPlugin) {
     val randomTeleport = ItemBuilder.from(Config.staffItems.randomItem.material).name(parseName(Config.staffItems.randomItem.name)).build()
     val freezeItem = ItemBuilder.from(Config.staffItems.freezeItem.material).name(parseName(Config.staffItems.freezeItem.name)).build()
 
-    getSavedPlayer()?.switchItem(this, plugin)
+    VanishManager(plugin).run(player!!)
 
     if (Config.staffCustomItem.isNotEmpty()) {
         Config.staffCustomItem.forEach {

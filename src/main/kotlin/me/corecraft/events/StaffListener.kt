@@ -10,6 +10,7 @@ import me.corecraft.hooks.enums.Permissions
 import me.corecraft.hooks.enums.hasPermission
 import org.bukkit.GameMode
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -56,6 +57,8 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
         if (player.getSavedPlayer()?.getStaff() == false) return
 
         if (!hasPermission(player, Permissions.STAFF_ITEMS_USE)) return
+
+        if (e.clickedBlock?.type != Material.AIR) return
 
         when (player.inventory.itemInMainHand.type) {
             Config.staffItems.randomItem.material -> {

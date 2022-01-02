@@ -16,9 +16,11 @@ object Data {
     var nextPlayerID: Int = 0
     var players = hashMapOf<UUID, Player>()
 
-    fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true).load(this, Data::class.java, "data.json")
+    fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true)
+        .load(this, Data::class.java, "data.json")
 
-    fun save(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true).save(this, "data.json")
+    fun save(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true)
+        .save(this, "data.json")
 
 }
 

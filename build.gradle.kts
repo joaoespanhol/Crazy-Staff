@@ -11,17 +11,18 @@ version = "1.2-STABLE"
 repositories {
     mavenCentral()
 
-    maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://oss.sonatype.org/content/repositories/central")
+    maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.mattstudios.me/artifactory/public/")
-
     maven("https://repo.codemc.org/repository/maven-public")
+    maven("https://repo.essentialsx.net/releases/")
     maven("https://jitpack.io")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("net.essentialsx:EssentialsX:2.19.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 

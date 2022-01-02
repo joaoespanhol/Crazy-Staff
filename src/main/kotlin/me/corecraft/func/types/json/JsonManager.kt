@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.time.LocalTime
 
-class Persist(private val dataFolder: File, private val data: Boolean) {
+class JsonManager(private val dataFolder: File, private val data: Boolean) {
 
     private val json = GsonBuilder()
         .setPrettyPrinting()
@@ -56,7 +56,7 @@ class Persist(private val dataFolder: File, private val data: Boolean) {
 
     fun save(instance: Any, name: String) = saveFile(instance, getFile(data, name))
 
-   private fun <T> loadFile(default: T, classObject: Class<T>, file: File): T {
+    private fun <T> loadFile(default: T, classObject: Class<T>, file: File): T {
         when {
             !file.exists() -> {
                 saveFile(default!!, file)
@@ -92,6 +92,36 @@ class Persist(private val dataFolder: File, private val data: Boolean) {
         }
 
         broken.delete()
-        return DiscUtil(dataFolder).write(DiscUtil.DefaultFile(data, file, json.toJson(instance)))
+        return write(DefaultFile(data, file, json.toJson(instance)))
     }
+
+    data class DefaultFile(val dataEnabled: Boolean, val file: File, val contents: String)
+
+    private fun write(parent: DefaultFile) {
+        val content = parent.contents
+        val file = parent.file
+
+        val fileObject = when (parent.dataEnabled) {
+            true -> {
+                val dataPath = File("$dataFolder/data")
+                if (!dataPath.exists()) dataPath.mkdirs()
+                File(dataPath, file.name)
+            }
+            false -> {
+                File(dataFolder, file.name)
+            }
+        }
+
+        runCatching {
+            fileObject.createNewFile()
+            val stream = FileOutputStream(fileObject)
+            OutputStreamWriter(stream, StandardCharsets.UTF_8).use { it.write(content) }
+        }
+    }
+}
+
+class Serializer(private val dataFolder: File, private val data: Boolean) {
+    fun <T> load(default: T, classObject: Class<T>, name: String) = JsonManager(dataFolder, data).load(default, classObject, name)
+
+    fun save(instance: Any, name: String) = JsonManager(dataFolder, data).save(instance, name)
 }

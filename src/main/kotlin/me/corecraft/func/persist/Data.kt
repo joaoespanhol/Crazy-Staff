@@ -5,6 +5,8 @@ import me.corecraft.commands.getSavedPlayer
 import me.corecraft.commands.hideStaff
 import me.corecraft.events.module.data.Player
 import me.corecraft.func.types.json.Serializer
+import me.corecraft.hooks.enums.Permissions
+import me.corecraft.hooks.enums.hasPermission
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -16,11 +18,9 @@ object Data {
     var nextPlayerID: Int = 0
     var players = hashMapOf<UUID, Player>()
 
-    fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true)
-        .load(this, Data::class.java, "data.json")
+    fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true).load(this, Data::class.java, "data.json")
 
-    fun save(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true)
-        .save(this, "data.json")
+    fun save(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true).save(this, "data.json")
 
 }
 

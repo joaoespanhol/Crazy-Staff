@@ -30,7 +30,7 @@ class DataListener(private val plugin: JavaPlugin) : Listener {
     fun onPlayerJoin(e: PlayerJoinEvent): Unit = with(e) {
         when {
             player.getSavedPlayer() != null -> {
-                if (player.getSavedPlayer()?.isStaff()!!) {
+                if (player.getSavedPlayer()?.getStaff() == true) {
                     player.inventory.clear()
                     player.createInventory(plugin)
                     player.hideStaff(plugin)

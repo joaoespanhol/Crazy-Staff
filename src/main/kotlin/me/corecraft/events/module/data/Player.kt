@@ -39,22 +39,31 @@ data class Player(val uuid: UUID) {
         location[name] = DataLocation(worldName, x, y, z, yaw, pitch)
     }
 
-    fun isStaff() = staff
+    fun getStaff() = staff
 
-    fun isFrozen() = frozen
+    fun getFrozen() = frozen
 
     fun isVanished() = vanished
 
     fun setFrozen() {
-        frozen = !isFrozen()
+        frozen = !getFrozen()
     }
 
     fun setStaff() {
-        staff = !isStaff()
+        staff = !getStaff()
     }
 
     fun setVanished(plugin: JavaPlugin) {
         vanished = !vanished
-        VanishManager(plugin).run(Bukkit.getPlayer(uuid)!!)
+        VanishManager(plugin).run(getPlayer())
     }
+
+    // Player Checks
+
+    private fun getPlayer() = Bukkit.getPlayer(uuid)
+
+    fun isOnline() = getPlayer()?.isOnline
+
+    fun isOffline() = !isOnline()!!
+
 }

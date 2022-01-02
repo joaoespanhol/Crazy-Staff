@@ -33,7 +33,7 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
     @Default
     @Permission("staff.use")
     fun defaultCommand(player: Player): Unit = with(player) {
-        if (getSavedPlayer()?.isStaff()!!) exitStaff(plugin) else enterStaff(plugin)
+        if (getSavedPlayer()?.getStaff() == true) exitStaff(plugin) else enterStaff(plugin)
     }
 
     @SubCommand("reload")
@@ -45,7 +45,7 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
         Data.save(plugin)
 
         commandSender.server.onlinePlayers.forEach {
-            if (it.getSavedPlayer()?.isStaff()!!) it.createInventory(plugin)
+            if (it.getSavedPlayer()?.getStaff() == true) it.createInventory(plugin)
         }
     }
 }
@@ -119,7 +119,7 @@ fun Player.createInventory(plugin: JavaPlugin) {
     val randomTeleport = ItemBuilder.from(Config.staffItems.randomItem.material).name(parseName(Config.staffItems.randomItem.name)).build()
     val freezeItem = ItemBuilder.from(Config.staffItems.freezeItem.material).name(parseName(Config.staffItems.freezeItem.name)).build()
 
-    VanishManager(plugin).run(player!!)
+    VanishManager(plugin).run(player)
 
     if (Config.staffCustomItem.isNotEmpty()) {
         Config.staffCustomItem.forEach {

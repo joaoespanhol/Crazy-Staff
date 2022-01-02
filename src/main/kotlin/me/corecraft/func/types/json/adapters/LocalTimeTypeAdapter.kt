@@ -14,7 +14,7 @@ class LocalTimeTypeAdapter : JsonSerializer<LocalTime?>, JsonDeserializer<LocalT
             jsonObject.add("second", JsonPrimitive(localTime.second))
             jsonObject.add("nano", JsonPrimitive(localTime.nano))
             jsonObject
-        }.onFailure { println(it.message) }
+        }.onFailure { it.printStackTrace() }
         return jsonObject
     }
 
@@ -22,7 +22,7 @@ class LocalTimeTypeAdapter : JsonSerializer<LocalTime?>, JsonDeserializer<LocalT
         val jsonObject: JsonObject = jsonElement.asJsonObject
         runCatching {
             LocalTime.of(jsonObject.get("hour").asInt, jsonObject.get("minute").asInt, jsonObject.get("second").asInt, jsonObject.get("nano").asInt)
-        }.onFailure { println(it.message) }
+        }.onFailure { it.printStackTrace() }
         return LocalTime.now()
     }
 }

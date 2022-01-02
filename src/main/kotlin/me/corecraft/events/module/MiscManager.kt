@@ -23,8 +23,8 @@ object MiscManager {
         }
     }
 
-    fun sendTitle(player: Player?, title: String, subtitle: String) {
+    fun sendTitle(player: Player?, title: String, subtitle: String): Unit? {
         val newTitle = Title.title(parseMessage(title), parseMessage(subtitle))
-        return player?.showTitle(newTitle)!!
+        return player?.showTitle(newTitle)
     }
 }

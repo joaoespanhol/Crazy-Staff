@@ -168,7 +168,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
 
     @EventHandler
     fun onPlayerDamage(e: EntityDamageByEntityEvent): Unit = with(e) {
-        if (e.entity !is Player) return
+        if (e.damager !is Player) return
         val player = e.damager as Player
         if (player.getSavedPlayer()?.isStaff()!! || player.getSavedPlayer()?.isFrozen()!!) isCancelled = true
     }

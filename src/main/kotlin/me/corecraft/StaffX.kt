@@ -7,6 +7,7 @@ import me.corecraft.func.persist.Config
 import me.corecraft.func.persist.Data
 import me.corecraft.func.persist.DataListener
 import me.corecraft.func.registerListener
+import me.corecraft.hooks.enums.registerPermissions
 import me.mattstudios.mf.base.CommandManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -21,6 +22,8 @@ class StaffX: JavaPlugin() {
 
         commandManager.hideTabComplete(true)
         commandManager.register(StaffCommand(this))
+
+        registerPermissions(server.pluginManager)
 
         Config.load(this)
         Data.load(this)

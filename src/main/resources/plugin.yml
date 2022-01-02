@@ -4,16 +4,3 @@ main: me.corecraft.StaffX
 api-version: '1.13'
 version: '1.2-STABLE'
 description: 'A simple staff plugin'
-permissions:
-  staffx.use:
-    description: Allows you to enter /staff
-    default: false
-  staffx.vanish.see:
-    description: Allows other staff to see you.
-    default: false
-  staffx.freeze.bypass:
-    description: Bypass freeze tool
-    default: false
-  staffx.items.use:
-    description: Use the staff tools
-    default: false

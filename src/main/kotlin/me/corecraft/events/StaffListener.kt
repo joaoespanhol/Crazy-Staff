@@ -52,7 +52,7 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     fun onPlayerInteract(e: PlayerInteractEvent): Unit = with(e) {
         if (!player.getSavedPlayer()?.isStaff()!!) return
 
-        if (!player.hasPermission("staffx.items.use")) return
+        if (getPermission(player, Permissions.STAFF_ITEMS_USE)) return
 
         when (player.inventory.itemInMainHand.type) {
             Config.staffItems.randomItem.material -> {
@@ -80,9 +80,11 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractAtEntityEvent): Unit = with(e) {
         if (!player.getSavedPlayer()?.isStaff()!!) return
-        if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !player.hasPermission("staffx.items.use") || hand != EquipmentSlot.HAND) return
+        if (player.inventory.itemInMainHand.type != Config.staffItems.freezeItem.material || !getPermission(player, Permissions.STAFF_ITEMS_USE) || hand != EquipmentSlot.HAND) return
 
-        if (rightClicked.hasPermission("staffx.freeze.bypass")) {
+        val person = rightClicked as Player
+
+        if (getPermission(person, Permissions.FREEZE_BYPASS)) {
             val title = Title.title(parseMessage("&cCannot freeze."), parseMessage("&fNice Try!"))
             player.showTitle(title)
             return

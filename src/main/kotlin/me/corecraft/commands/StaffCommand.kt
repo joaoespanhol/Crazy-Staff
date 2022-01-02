@@ -26,13 +26,13 @@ import org.bukkit.plugin.java.JavaPlugin
 class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
 
     @Default
-    @Permission("staffx.use")
+    @Permission("staff.use")
     fun defaultCommand(player: Player): Unit = with(player) {
         if (getSavedPlayer()?.isStaff()!!) player.exitStaff(plugin) else player.enterStaff(plugin)
     }
 
     @SubCommand("reload")
-    @Permission("staffx.use.reload")
+    @Permission("staff.use.reload")
     fun onReload(commandSender: CommandSender): Unit = with(commandSender) {
         Config.load(plugin)
         Config.save(plugin)

@@ -33,7 +33,7 @@ data class Player(val uuid: UUID) {
 
     fun getFrozen() = frozen
 
-    fun isVanished() = vanished
+    fun getVanished() = vanished
 
     fun setFrozen() {
         frozen = !getFrozen()
@@ -43,9 +43,11 @@ data class Player(val uuid: UUID) {
         staff = !getStaff()
     }
 
-    fun setVanished(plugin: JavaPlugin) {
-        vanished = !vanished
-        VanishManager(plugin).run(getPlayer())
+    fun setVanished(plugin: JavaPlugin, exit: Boolean = false, vanishOff: Boolean = false) {
+        if (exit) vanished = vanishOff else {
+            vanished = !vanished
+            VanishManager(plugin).run(getPlayer())
+        }
     }
 
     // Player Checks

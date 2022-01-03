@@ -13,7 +13,7 @@ class VanishManager(private val plugin: JavaPlugin) {
     fun run(player: Player?) {
         val vanishOffItem = ItemBuilder.from(Config.staffItems.vanishOffItem.material).name(parseName(Config.staffItems.vanishOffItem.name)).build()
         val vanishOnItem = ItemBuilder.from(Config.staffItems.vanishOnItem.material).name(parseName(Config.staffItems.vanishOnItem.name)).build()
-        when (player?.getSavedPlayer()?.isVanished()) {
+        when (player?.getSavedPlayer()?.getVanished()) {
             true -> {
                 player.hideStaff(plugin)
                 player.inventory.setItem(Config.staffItems.vanishOnItem.slot, vanishOnItem)

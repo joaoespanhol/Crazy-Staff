@@ -96,7 +96,7 @@ fun Player.enterStaff(plugin: JavaPlugin) {
     if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(this, Config.staffModeEnter.title, Config.staffModeEnter.subtitle) else sendMessage(parseMessage(Config.staffModeEnterLegacy))
 
     getSavedPlayer()?.setStaff()
-    VanishManager(plugin).run(this)
+    getSavedPlayer()?.setVanished(plugin)
 
     if (getSavedPlayer()?.getCurrentLocation(name) != null) getSavedPlayer()?.removeLocation()
 
@@ -112,7 +112,7 @@ fun Player.exitStaff(plugin: JavaPlugin) {
     if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(this, Config.staffModeExit.title, Config.staffModeExit.subtitle) else sendMessage(parseMessage(Config.staffModeExitLegacy))
 
     getSavedPlayer()?.setStaff()
-    VanishManager(plugin).run(this)
+    getSavedPlayer()?.setVanished(plugin, true)
 
     inventory.clear()
 

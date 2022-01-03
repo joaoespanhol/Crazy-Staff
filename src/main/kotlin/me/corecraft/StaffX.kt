@@ -21,7 +21,7 @@ class StaffX: JavaPlugin() {
 
         PaperLib.suggestPaper(this)
 
-        MetricsHandler(this).connect()
+        if (Config.metricTracking) MetricsHandler(this).connect()
 
         if (!dataFolder.exists()) dataFolder.mkdirs()
 

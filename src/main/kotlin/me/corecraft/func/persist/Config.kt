@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 object Config {
 
+    var metricTracking = true
+
     data class StaffModeEnterTitle(val title: String, val subtitle: String)
     data class StaffModeQuitTitle(val title: String, val subtitle: String)
 

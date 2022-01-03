@@ -70,7 +70,9 @@ fun Player.hideStaff(plugin: JavaPlugin) {
         }
         else -> {
             server.onlinePlayers.forEach {
-                if (hasPermission(it, Permissions.VANISH_SEE)) it.showPlayer(plugin, player!!) else it.hidePlayer(plugin, player!!)
+                player?.let { pp ->
+                    if (hasPermission(it, Permissions.VANISH_SEE)) it.showPlayer(plugin, pp) else it.hidePlayer(plugin, pp)
+                }
             }
         }
     }
@@ -83,7 +85,7 @@ fun Player.showStaff(plugin: JavaPlugin) {
         }
         else -> {
             server.onlinePlayers.forEach {
-                it.showPlayer(plugin, player!!)
+                player?.let { pp -> it.showPlayer(plugin, pp) }
             }
         }
     }

@@ -52,8 +52,8 @@ data class Player(val uuid: UUID) {
 
     private fun getPlayer() = Bukkit.getPlayer(uuid)
 
-    fun isOnline() = getPlayer()?.isOnline
+    fun isOnline() = getPlayer()?.isOnline == true
 
-    fun isOffline() = !isOnline()!!
+    fun isOffline() = getPlayer()?.isOnline == false
 
 }

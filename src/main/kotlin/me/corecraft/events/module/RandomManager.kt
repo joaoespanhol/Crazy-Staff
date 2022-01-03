@@ -28,9 +28,11 @@ object RandomManager {
                     }
                 }
             }
-            if (person.getSavedPlayer()?.getStaff()  == true) {
+            if (person.getSavedPlayer()?.getStaff() == false) {
                 gui.clearPageItems()
-                skull?.let { skulls -> gui.addItem(skulls) }
+                skull?.let { skulls ->
+                    gui.addItem(skulls)
+                }
             }
         }
 

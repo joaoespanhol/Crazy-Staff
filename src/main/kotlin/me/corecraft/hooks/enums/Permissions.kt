@@ -8,6 +8,7 @@ import org.bukkit.plugin.PluginManager
 enum class Permissions(private val node: String, val description: String, val permissionDefault: PermissionDefault) {
 
     STAFF_ITEMS_USE("staff.items.use", "Ability to use all items for StaffX", PermissionDefault.FALSE),
+    STAFF_SILENT_CHEST("staff.silent.chest", "Ability to open chests silently", PermissionDefault.FALSE),
     VANISH_SEE("staff.vanish.see", "Ability to see other staff in vanish", PermissionDefault.FALSE),
     FREEZE_BYPASS("staff.freeze.bypass", "Ability to bypass being frozen", PermissionDefault.FALSE);
 

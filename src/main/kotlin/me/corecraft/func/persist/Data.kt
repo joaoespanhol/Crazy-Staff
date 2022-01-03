@@ -16,6 +16,7 @@ import java.util.*
 object Data {
 
     var nextPlayerID: Int = 0
+    var serverSetUp: Boolean = false
     var players = hashMapOf<UUID, Player>()
 
     var playerSpawn = hashSetOf<DataLocation>()
@@ -26,8 +27,8 @@ object Data {
 
 }
 
+@Suppress("DEPRECATION")
 class DataListener(private val plugin: JavaPlugin) : Listener {
-
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent): Unit = with(e) {
         when {
@@ -36,6 +37,8 @@ class DataListener(private val plugin: JavaPlugin) : Listener {
                     player.inventory.clear()
                     player.createInventory(plugin)
                     player.hideStaff(plugin)
+
+                    if (player.getSavedPlayer()?.getVanished() == true) e.joinMessage = ""
                 }
             }
             else -> {

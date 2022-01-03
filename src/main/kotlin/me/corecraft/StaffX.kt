@@ -2,7 +2,9 @@ package me.corecraft
 
 import io.papermc.lib.PaperLib
 import me.corecraft.commands.StaffCommand
+import me.corecraft.events.EntityListener
 import me.corecraft.events.PaperListeners
+import me.corecraft.events.PlayerListener
 import me.corecraft.events.StaffListener
 import me.corecraft.func.MetricsHandler
 import me.corecraft.func.persist.Config
@@ -35,7 +37,9 @@ class StaffX: JavaPlugin() {
 
         registerListener(
             DataListener(this),
-            StaffListener(this)
+            StaffListener(this),
+            EntityListener,
+            PlayerListener
         )
 
         if (PaperLib.isPaper()) {
@@ -46,6 +50,14 @@ class StaffX: JavaPlugin() {
         server.scheduler.runTaskTimerAsynchronously(this, Runnable {
             Data.save(this)
         }, 0L, 20L * 300)
+
+        if (!Data.serverSetUp) {
+            logger.warning("---------------------------------------------")
+            logger.warning("You are installing the plugin for the first time!")
+            logger.warning("Please when in-game, Run the commands /staff setspawn")
+            logger.warning("This is to insure that Freeze works as intended.")
+            logger.warning("---------------------------------------------")
+        }
     }
 
     override fun onDisable() {

@@ -59,7 +59,7 @@ class JsonManager(private val dataFolder: File, private val data: Boolean) {
     private fun <T> loadFile(default: T, classObject: Class<T>, file: File): T {
         when {
             !file.exists() -> {
-                saveFile(default!!, file)
+                saveFile(default, file)
                 return default
             }
             else -> {
@@ -76,7 +76,7 @@ class JsonManager(private val dataFolder: File, private val data: Boolean) {
         }
     }
 
-    private fun saveFile(instance: Any, file: File) {
+    private fun saveFile(instance: Any?, file: File) {
 
         val json = when (data) {
             true -> this.dataJson

@@ -24,7 +24,9 @@ Spent quite a bit of my time looking around on Mc-Market/Spigot which were eithe
 - Set slot items to 100 for pre-defined items to disable them.
 - Using paper lib to enable extra paper listeners like denying Mob Targeting for both Frozen & Staff
 - Can toggle off metrics in the config.json
-- Add legacy messages in case you aren't using Paper, It will auto change.
+- Chat messages instead of Title messages in case you aren't using Paper, It will auto change regardless of the value of sendTitles likewise you can set it to false if you prefer the old messages.
+- GUI Customization of the Random Teleport Menu
+- Everything locale wise is customizable.
 
 ## Support
 Create an issue, Supply an error log / description of how to reproduce ( including high mspt issues )

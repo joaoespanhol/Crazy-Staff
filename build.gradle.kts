@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.corecraft"
-version = "1.3-STABLE"
+version = "1.4-STABLE"
 
 repositories {
     mavenCentral()
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
     compileOnly("net.essentialsx:EssentialsX:2.19.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
@@ -47,5 +47,6 @@ tasks {
         relocate("me.mattstudios.utils", "me.corecraft.libs")
         relocate("dev.triumphteam.gui", "me.corecraft.libs")
         relocate("org.bstats", "me.corecraft.libs")
+        relocate("io.papermc.lib", "me.corecraft.libs")
     }
 }

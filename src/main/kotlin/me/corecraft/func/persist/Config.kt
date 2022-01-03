@@ -12,15 +12,18 @@ object Config {
     data class FreezeTitle(val title: String, val subtitle: String)
     data class UnFreezeTitle(val title: String, val subtitle: String)
 
+    var useTitles = true
     var staffModeEnter = StaffModeEnterTitle("&cStaff Mode", "&aENABLED")
     var staffModeExit = StaffModeQuitTitle("&cStaff Mode", "&cDISABLED")
 
     var freezeTitle = FreezeTitle("&cYou have been frozen.", "&fDo not log out.")
     var unFreezeTitle = UnFreezeTitle("&cYou have been unfrozen.", "")
 
-    var staffSilentOpen = false
-    var staffVanishEffects = true
+    var freezeLegacy = "&r &cStaff &8» &7You have been &cfrozen. &fDo not log out!"
+    var unFreezeLegacy = "&r &cStaff &8» &7You have been &cunfrozen."
 
+    var staffModeEnterLegacy = "&r &cStaff &8» &7You have &aenabled &cStaff Mode."
+    var staffModeExitLegacy = "&r &cStaff &8» &7You have &cdisabled Staff Mode."
     var staffQuitCommands = listOf(
         "tempban %player% hacking 1d"
     )

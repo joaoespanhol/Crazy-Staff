@@ -31,6 +31,7 @@ dependencies {
     implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:2.2.1")
+    implementation("io.papermc:paperlib:1.0.7")
 }
 
 tasks {

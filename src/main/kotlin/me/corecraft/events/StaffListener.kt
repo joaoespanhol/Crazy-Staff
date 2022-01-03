@@ -102,7 +102,11 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
     private fun runFreeze(rightClicked: Player, player: Player) {
         when (rightClicked.getSavedPlayer()?.getFrozen()) {
             true -> {
-                MiscManager.sendTitle(rightClicked, Config.unFreezeTitle.title, Config.unFreezeTitle.subtitle)
+                if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(
+                    rightClicked,
+                    Config.unFreezeTitle.title,
+                    Config.unFreezeTitle.subtitle
+                ) else rightClicked.sendMessage(parseMessage(Config.freezeLegacy))
 
                 rightClicked.getSavedPlayer()?.setFrozen()
 
@@ -112,40 +116,32 @@ class StaffListener(private val plugin: JavaPlugin) : Listener {
                 player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
             }
             false -> {
-                MiscManager.sendTitle(rightClicked, Config.freezeTitle.title, Config.freezeTitle.subtitle)
+                if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(
+                    rightClicked,
+                    Config.freezeTitle.title,
+                    Config.freezeTitle.subtitle
+                ) else rightClicked.sendMessage(parseMessage(Config.unFreezeLegacy))
 
                 rightClicked.getSavedPlayer()?.setFrozen()
 
                 rightClicked.gameMode = GameMode.ADVENTURE
                 rightClicked.isInvulnerable = true
-                rightClicked.teleport(
-                    Location(
-                        rightClicked.server.getWorld("world"),
-                        0.5,
-                        61.0,
-                        0.5,
-                        0.022159427404403687F,
-                        -0.1511383205652237F
-                    )
-                )
-                player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 0.5F, 0.5F)
-            }
-            else -> {}
-        }
-    }
-
-    @EventHandler
-    fun onPlayerMove(e: PlayerMoveEvent): Unit = with(e) {
-        when (player.getSavedPlayer()?.getFrozen()) {
-            true -> {
-                isCancelled = true
-            }
-            false -> {
-                return
-            }
-            else -> {}
-        }
-    }
+                Data.playerSpawn.forEach {
+                    when (PaperLib.isPaper()) {
+                        true -> {
+                            if (Data.playerSpawn.isNotEmpty()) rightClicked.teleportAsync(it.getLocation()) else {
+                                rightClicked.server.logger.info("No spawn location found, Teleporting to the nearest spawn location.")
+                                rightClicked.server.logger.info("Make sure they don't die.")
+                                rightClicked.teleportAsync(player.world.spawnLocation)
+                            }
+                        }
+                        false -> {
+                            if (Data.playerSpawn.isNotEmpty()) rightClicked.teleport(it.getLocation()) else {
+                                rightClicked.server.logger.info("No spawn location found, Teleporting to the nearest spawn location.")
+                                rightClicked.server.logger.info("Make sure they don't die.")
+                                rightClicked.teleport(player.world.spawnLocation)
+                            }
+                        }
 
     @EventHandler(ignoreCancelled = true)
     fun onPlayerDrop(e: PlayerDropItemEvent): Unit = with(e) {

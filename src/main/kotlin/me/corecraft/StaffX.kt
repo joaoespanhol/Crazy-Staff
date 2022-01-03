@@ -1,6 +1,8 @@
 package me.corecraft
 
+import io.papermc.lib.PaperLib
 import me.corecraft.commands.StaffCommand
+import me.corecraft.events.PaperListeners
 import me.corecraft.events.StaffListener
 import me.corecraft.func.MetricsHandler
 import me.corecraft.func.persist.Config
@@ -14,6 +16,9 @@ import org.bukkit.plugin.java.JavaPlugin
 class StaffX: JavaPlugin() {
 
     override fun onEnable() {
+
+        PaperLib.suggestPaper(this)
+
         MetricsHandler(this).connect()
 
         if (!dataFolder.exists()) dataFolder.mkdirs()
@@ -32,6 +37,11 @@ class StaffX: JavaPlugin() {
             DataListener(this),
             StaffListener(this)
         )
+
+        if (PaperLib.isPaper()) {
+            logger.info("Utilizing Paper functions...")
+            registerListener(PaperListeners)
+        }
 
         server.scheduler.runTaskTimerAsynchronously(this, Runnable {
             Data.save(this)

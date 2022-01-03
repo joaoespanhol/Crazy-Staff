@@ -80,7 +80,7 @@ fun Player.showStaff(plugin: JavaPlugin) {
 
 fun Player.enterStaff(plugin: JavaPlugin) {
 
-    MiscManager.sendTitle(this, Config.staffModeEnter.title, Config.staffModeEnter.subtitle)
+    if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(this, Config.staffModeEnter.title, Config.staffModeEnter.subtitle) else sendMessage(parseMessage(Config.staffModeEnterLegacy))
 
     getSavedPlayer()?.setStaff()
     VanishManager(plugin).run(this)
@@ -96,7 +96,7 @@ fun Player.enterStaff(plugin: JavaPlugin) {
 
 fun Player.exitStaff(plugin: JavaPlugin) {
 
-    MiscManager.sendTitle(this, Config.staffModeExit.title, Config.staffModeExit.subtitle)
+    if (PaperLib.isPaper() && Config.useTitles) MiscManager.sendTitle(this, Config.staffModeExit.title, Config.staffModeExit.subtitle) else sendMessage(parseMessage(Config.staffModeExitLegacy))
 
     getSavedPlayer()?.setStaff()
     VanishManager(plugin).run(this)

@@ -5,3 +5,5 @@ api-version: '1.13'
 version: '1.4-STABLE'
 description: 'A simple staff plugin'
 load: POSTWORLD
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.6.0

@@ -24,12 +24,12 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
     compileOnly("net.essentialsx:EssentialsX:2.19.0")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 
     implementation("me.mattstudios.utils:matt-framework:1.4.6")
+
     implementation("dev.triumphteam:triumph-gui:3.0.5")
     implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
-
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("io.papermc:paperlib:1.0.7")
 }

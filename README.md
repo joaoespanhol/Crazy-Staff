@@ -1,6 +1,9 @@
 ## Name
 StaffX
 
+## Version Support
+Only support 1.13 and above, I do ASK that you update to 1.18 as old versions are just not optimal to play in.
+
 ## Want to contribute?
 Create a fork of StaffX and submit a pull request ( Please review your code, Any pull request in Java will be closed but I'll merge it manually in kotlin)
 

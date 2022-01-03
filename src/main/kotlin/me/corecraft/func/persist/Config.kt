@@ -13,6 +13,7 @@ object Config {
     data class UnFreezeTitle(val title: String, val subtitle: String)
 
     var useTitles = true
+
     var staffModeEnter = StaffModeEnterTitle("&cStaff Mode", "&aENABLED")
     var staffModeExit = StaffModeQuitTitle("&cStaff Mode", "&cDISABLED")
 
@@ -24,11 +25,20 @@ object Config {
 
     var staffModeEnterLegacy = "&r &cStaff &8» &7You have &aenabled &cStaff Mode."
     var staffModeExitLegacy = "&r &cStaff &8» &7You have &cdisabled Staff Mode."
+
+    var spawnSet = "&r &cStaff &8» &7You have set the spawn."
+
+    //var staffSilentOpen = false
+
+    var staffVanishEffects = false
+
+    var staffQuitCommandsEnabled: Boolean = false
     var staffQuitCommands = listOf(
         "tempban %player% hacking 1d"
     )
 
-    var staffCustomItem = listOf(
+    var staffCustomItemsEnabled: Boolean = false
+    var staffCustomItems = listOf(
         CustomItem(
             Material.CHEST,
             "&cPunishment Menu",

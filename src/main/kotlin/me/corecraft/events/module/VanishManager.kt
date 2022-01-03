@@ -11,6 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class VanishManager(private val plugin: JavaPlugin) {
     fun run(player: Player?) {
+        if (Config.staffItems.vanishOnItem.slot == 100 || Config.staffItems.vanishOffItem.slot == 100) {
+            plugin.logger.warning("One of your vanish items in config.json has 100 as a value.")
+            return
+        }
         val vanishOffItem = ItemBuilder.from(Config.staffItems.vanishOffItem.material).name(parseName(Config.staffItems.vanishOffItem.name)).build()
         val vanishOnItem = ItemBuilder.from(Config.staffItems.vanishOnItem.material).name(parseName(Config.staffItems.vanishOnItem.name)).build()
         when (player?.getSavedPlayer()?.getVanished()) {

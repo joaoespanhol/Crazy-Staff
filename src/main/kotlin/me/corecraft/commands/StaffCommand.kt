@@ -134,15 +134,15 @@ fun Player.createInventory(plugin: JavaPlugin) {
 
     VanishManager(plugin).run(player)
 
-    if (Config.staffCustomItem.isNotEmpty()) {
-        Config.staffCustomItem.forEach {
+    if (Config.staffCustomItems.isNotEmpty() && Config.staffCustomItemsEnabled) {
+        Config.staffCustomItems.forEach {
             val item = ItemBuilder.from(it.material).name(parseName(it.name)).setLore(parseLore(it.lore)).amount(1).build()
             inventory.setItem(it.slot, item)
         }
     }
 
-    inventory.setItem(Config.staffItems.randomItem.slot, randomTeleport)
-    inventory.setItem(Config.staffItems.freezeItem.slot, freezeItem)
+    if (Config.staffItems.randomItem.slot != 100) inventory.setItem(Config.staffItems.randomItem.slot, randomTeleport) else plugin.logger.info("Random Teleport slot is set to 100 and will not load.")
+    if (Config.staffItems.randomItem.slot != 100) inventory.setItem(Config.staffItems.freezeItem.slot, freezeItem) else plugin.logger.info("Freeze Tool slot is set to 100 and will not load.")
 }
 
 fun getMessage(): AdventureMessage {

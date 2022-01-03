@@ -28,6 +28,8 @@ Spent quite a bit of my time looking around on Mc-Market/Spigot which were eithe
 ## Support
 Create an issue, Supply an error log / description of how to reproduce ( including high mspt issues )
 
+Join our Discord @ https://discord.gg/g7ewP3K7Eh If you want a speedy response
+
 ## Usage
 Everything is configurable if you open config.json
 

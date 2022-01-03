@@ -1,6 +1,3 @@
-## Name
-StaffX
-
 ## Version Support
 Only support 1.13 and above, I do ASK that you update to 1.18 as old versions are just not optimal to play in.
 

@@ -3,6 +3,7 @@
 package me.corecraft.commands
 
 import dev.triumphteam.gui.builder.item.ItemBuilder
+import io.papermc.lib.PaperLib
 import me.mattstudios.mf.annotations.Command
 import me.mattstudios.mf.annotations.Default
 import me.mattstudios.mf.annotations.Permission
@@ -17,6 +18,7 @@ import me.corecraft.events.module.VanishManager
 import me.corecraft.func.colorizeList
 import me.corecraft.func.persist.Config
 import me.corecraft.func.persist.Data
+import me.corecraft.func.persist.setSpawn
 import me.corecraft.hooks.Support
 import me.corecraft.hooks.enums.Permissions
 import me.corecraft.hooks.enums.hasPermission
@@ -47,6 +49,15 @@ class StaffCommand(private val plugin: JavaPlugin) : CommandBase() {
         commandSender.server.onlinePlayers.forEach {
             if (it.getSavedPlayer()?.getStaff() == true) it.createInventory(plugin)
         }
+    }
+
+    @SubCommand("setspawn")
+    @Permission("staff.use.setspawn")
+    fun onSetSpawn(player: Player): Unit = with (player) {
+        if (!Data.serverSetUp) Data.serverSetUp = true
+        setSpawn(world.name, location.x, location.y, location.z, location.yaw, location.pitch)
+
+        sendMessage(parseMessage(Config.spawnSet))
     }
 }
 

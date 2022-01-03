@@ -5,8 +5,8 @@ import me.corecraft.commands.getSavedPlayer
 import me.corecraft.commands.hideStaff
 import me.corecraft.events.module.data.Player
 import me.corecraft.func.types.json.Serializer
-import me.corecraft.hooks.enums.Permissions
-import me.corecraft.hooks.enums.hasPermission
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -17,6 +17,8 @@ object Data {
 
     var nextPlayerID: Int = 0
     var players = hashMapOf<UUID, Player>()
+
+    var playerSpawn = hashSetOf<DataLocation>()
 
     fun load(plugin: JavaPlugin) = Serializer(plugin.dataFolder, true).load(this, Data::class.java, "data.json")
 
@@ -45,11 +47,31 @@ class DataListener(private val plugin: JavaPlugin) : Listener {
             it.hideStaff(plugin)
         }
     }
+}
 
-    private fun createPlayer(player: org.bukkit.entity.Player): Player {
-        val newPlayer = Player(player.uniqueId)
-        Data.players[player.uniqueId] = newPlayer
-        Data.nextPlayerID++
-        return newPlayer
+fun createPlayer(player: org.bukkit.entity.Player): Player {
+    val newPlayer = Player(player.uniqueId)
+    Data.players[player.uniqueId] = newPlayer
+    Data.nextPlayerID++
+    return newPlayer
+}
+
+fun setSpawn(worldName: String, x: Double, y: Double, z: Double, yaw: Float = -1F, pitch: Float = -1F): Boolean {
+    val loc = DataLocation(worldName, x, y, z, yaw, pitch)
+    return Data.playerSpawn.add(loc)
+}
+
+data class DataLocation(val worldName: String?, val x: Double, val y: Double, val z: Double, val yaw: Float = -1F, val pitch: Float = -1F) {
+
+    fun getLocation() = Location(Bukkit.getWorld(worldName.toString()), x, y, z).apply {
+        val dataYaw = this@DataLocation.yaw
+        if (dataYaw != -1F) yaw = dataYaw
+
+        val dataPitch = this@DataLocation.pitch
+        if (dataPitch != -1F) pitch = dataPitch
+    }
+
+    fun removeSpawn() {
+        return Data.playerSpawn.clear()
     }
 }

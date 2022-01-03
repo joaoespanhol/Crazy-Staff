@@ -1,6 +1,7 @@
 package me.corecraft.events.module.data
 
 import me.corecraft.events.module.VanishManager
+import me.corecraft.func.persist.DataLocation
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
@@ -15,17 +16,6 @@ data class Player(val uuid: UUID) {
     private var vanished: Boolean = false
 
     private var location = hashMapOf<String, DataLocation>()
-
-    data class DataLocation(val worldName: String?, val x: Double, val y: Double, val z: Double, val yaw: Float = -1F, val pitch: Float = -1F) {
-
-        fun getLocation() = Location(Bukkit.getWorld(worldName.toString()), x, y, z).apply {
-            val dataYaw = this@DataLocation.yaw
-            if (dataYaw != -1F) yaw = dataYaw
-
-            val dataPitch = this@DataLocation.pitch
-            if (dataPitch != -1F) pitch = dataPitch
-        }
-    }
 
     fun removeLocation() {
         return location.clear()

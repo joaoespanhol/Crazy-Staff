@@ -11,8 +11,6 @@ version = "1.4-STABLE"
 repositories {
     mavenCentral()
 
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-    maven("https://oss.sonatype.org/content/repositories/central")
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.mattstudios.me/artifactory/public/")
     maven("https://repo.codemc.org/repository/maven-public")
@@ -22,7 +20,9 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
-    compileOnly("net.essentialsx:EssentialsX:2.19.0")
+    compileOnly("net.essentialsx:EssentialsX:2.19.0") {
+        exclude("org.spigotmc")
+    }
 
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 

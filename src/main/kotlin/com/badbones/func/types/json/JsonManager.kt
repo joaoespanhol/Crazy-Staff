@@ -20,8 +20,7 @@ class JsonManager(private val dataFolder: File, private val data: Boolean) {
         .excludeFieldsWithModifiers(128, 64)
         .registerTypeAdapter(LocalTime::class.java, LocalTimeTypeAdapter())
         .registerTypeAdapter(Inventory::class.java, InventoryTypeAdapter())
-        .registerTypeAdapter(Location::class.java, LocationTypeAdapter())
-        .registerTypeAdapterFactory(com.badbones.types.json.adapters.EnumTypeAdapter.ENUM_FACTORY).create()
+        .registerTypeAdapter(Location::class.java, LocationTypeAdapter()).create()
 
     private val dataJson = GsonBuilder()
         .disableHtmlEscaping()
@@ -29,8 +28,7 @@ class JsonManager(private val dataFolder: File, private val data: Boolean) {
         .excludeFieldsWithModifiers(128, 64)
         .registerTypeAdapter(LocalTime::class.java, LocalTimeTypeAdapter())
         .registerTypeAdapter(Inventory::class.java, InventoryTypeAdapter())
-        .registerTypeAdapter(Location::class.java, LocationTypeAdapter())
-        .registerTypeAdapterFactory(com.badbones.types.json.adapters.EnumTypeAdapter.ENUM_FACTORY).create()
+        .registerTypeAdapter(Location::class.java, LocationTypeAdapter()).create()
 
     private fun getFile(data: Boolean, name: String): File {
         var dataFolder = this.dataFolder

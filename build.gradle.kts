@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
+
     compileOnly("net.essentialsx:EssentialsX:2.19.0") {
         exclude("org.spigotmc")
     }

@@ -5,7 +5,7 @@ plugins {
     java
 }
 
-group = "me.corecraft"
+group = "com.badbones"
 version = "1.4-STABLE"
 
 repositories {
@@ -44,9 +44,9 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${version}.jar")
 
-        relocate("me.mattstudios.utils", "me.corecraft.libs")
-        relocate("dev.triumphteam.gui", "me.corecraft.libs")
-        relocate("org.bstats", "me.corecraft.libs")
-        relocate("io.papermc.lib", "me.corecraft.libs")
+        relocate("me.mattstudios.utils", "com.badbones.libs")
+        relocate("dev.triumphteam.gui", "com.badbones.libs")
+        relocate("org.bstats", "com.badbones.libs")
+        relocate("io.papermc.lib", "com.badbones.libs")
     }
 }

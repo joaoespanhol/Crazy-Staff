@@ -1,6 +1,6 @@
-name: StaffX
+name: CrazyStaff
 authors: [Ryder Belserion]
-main: me.corecraft.StaffX
+main: com.badbones.CrazyStaff
 api-version: '1.13'
 version: '1.4-STABLE'
 description: 'A simple staff plugin'

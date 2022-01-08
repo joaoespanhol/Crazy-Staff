@@ -2,7 +2,7 @@
 Only support 1.13 and above, I do ASK that you update to 1.18 as old versions are just not optimal to play in.
 
 ## Want to contribute?
-Create a fork of CrazyStaff and submit a pull request ( Please review your code, Any pull request in Java will be closed but I'll merge it manually in kotlin)
+Create a fork of CrazyStaff and submit a pull request ( Please review your code, Any pull request in Java will be re-written in Kotlin )
 
 ## Description
 Spent quite a bit of my time looking around on Mc-Market/Spigot which were either not updated, updated but not what I wanted, updated but just terrible. I decided that enough was enough and wrote a simplistic version in Kotlin. 

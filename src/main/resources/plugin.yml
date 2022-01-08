@@ -2,7 +2,7 @@ name: CrazyStaff
 authors: [Ryder Belserion]
 main: com.badbones.CrazyStaff
 api-version: '1.13'
-version: '1.4-STABLE'
+version: 'v1.0.2'
 description: 'A simple staff plugin'
 load: POSTWORLD
 libraries:

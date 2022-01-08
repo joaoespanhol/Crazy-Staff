@@ -5,8 +5,8 @@ plugins {
     java
 }
 
-group = "com.badbones"
-version = "1.4-STABLE"
+rootProject.group = "com.badbones"
+rootProject.version = "v1.0.2"
 
 repositories {
     mavenCentral()
@@ -43,7 +43,7 @@ tasks {
     }
 
     shadowJar {
-        archiveFileName.set("${rootProject.name}-${version}.jar")
+        archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
 
         relocate("me.mattstudios.utils", "com.badbones.libs")
         relocate("dev.triumphteam.gui", "com.badbones.libs")

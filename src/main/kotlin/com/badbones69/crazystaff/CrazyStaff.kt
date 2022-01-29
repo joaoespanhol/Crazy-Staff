@@ -1,4 +1,4 @@
-package com.badbones
+package com.badbones69.crazystaff
 
 import org.bukkit.plugin.java.JavaPlugin
 

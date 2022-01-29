@@ -16,3 +16,8 @@ jobs:
         run: git config --global user.email "no-reply@github.com" && git config --global user.name "Github Actions"
       - name: Build
         run: ./gradlew build --stacktrace
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: CS-Build
+          path: build/libs/Crazy-Staff-*.*.*.jar

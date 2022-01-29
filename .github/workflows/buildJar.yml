@@ -16,8 +16,15 @@ jobs:
         run: git config --global user.email "no-reply@github.com" && git config --global user.name "Github Actions"
       - name: Build
         run: ./gradlew build --stacktrace
+      - name: Cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/cache
+    # An explicit key for restoring and saving the cache
+          key: ${{ runner.os }}-primes
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: CS-Build
+          name: Crazy-Staff
           path: build/libs/Crazy-Staff-*.*.*.jar

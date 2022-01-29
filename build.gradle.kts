@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version "1.6.0"
 
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    java
 }
 
 rootProject.group = "com.badbones"
@@ -21,18 +20,18 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
 
-    compileOnly("net.essentialsx:EssentialsX:2.19.0") {
-        exclude("org.spigotmc")
-    }
-
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 
-    implementation("me.mattstudios.utils:matt-framework:1.4.6")
+    //compileOnly("net.essentialsx:EssentialsX:2.19.0") {
+    //    exclude("org.spigotmc")
+    //}
 
-    implementation("dev.triumphteam:triumph-gui:3.0.5")
-    implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
-    implementation("org.bstats:bstats-bukkit:2.2.1")
-    implementation("io.papermc:paperlib:1.0.7")
+    //implementation("me.mattstudios.utils:matt-framework:1.4.6")
+
+    //implementation("dev.triumphteam:triumph-gui:3.0.5")
+    //implementation("me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT")
+    //implementation("org.bstats:bstats-bukkit:2.2.1")
+    //implementation("io.papermc:paperlib:1.0.7")
 }
 
 tasks {
@@ -45,9 +44,9 @@ tasks {
     shadowJar {
         archiveFileName.set("${rootProject.name}-${rootProject.version}.jar")
 
-        relocate("me.mattstudios.utils", "com.badbones.libs")
-        relocate("dev.triumphteam.gui", "com.badbones.libs")
-        relocate("org.bstats", "com.badbones.libs")
-        relocate("io.papermc.lib", "com.badbones.libs")
+        //relocate("me.mattstudios.utils", "com.badbones.libs")
+        //relocate("dev.triumphteam.gui", "com.badbones.libs")
+        //relocate("org.bstats", "com.badbones.libs")
+        //relocate("io.papermc.lib", "com.badbones.libs")
     }
 }

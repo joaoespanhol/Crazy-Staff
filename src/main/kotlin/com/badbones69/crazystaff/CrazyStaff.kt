@@ -6,6 +6,7 @@ class CrazyStaff: JavaPlugin() {
 
     override fun onEnable() {
         logger.info("Plugin is turning on.")
+        logger.info("Testing")
     }
 
     override fun onDisable() {
